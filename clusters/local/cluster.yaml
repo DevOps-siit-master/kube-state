@@ -1,0 +1,16 @@
+# Metadata for the local development cluster.
+apiVersion: kube-state/v1
+kind: Cluster
+metadata:
+  name: local
+spec:
+  # Local Kubernetes distribution used for development.
+  distribution: kind
+  kubernetesVersion: "1.30"
+  releases:
+    - name: shop-operator
+      namespace: shop-operator-system
+    - name: shophub
+      namespace: shophub
+    - name: shophub-discord
+      namespace: shophub
