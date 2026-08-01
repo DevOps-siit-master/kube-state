@@ -1,0 +1,15 @@
+# Value overrides for the shophub chart on the local (kind) cluster.
+# Only overrides — chart defaults live in helm-charts/charts/shophub/values.yaml.
+
+replicaCount: 2
+
+image:
+  repository: shophub-auth-service
+  tag: "latest"
+
+postgres:
+  instances: 1
+  databaseName: "shophub_auth"
+  username: "shophub_admin"
+  storageClass: "standard"
+  storageSize: "1Gi"

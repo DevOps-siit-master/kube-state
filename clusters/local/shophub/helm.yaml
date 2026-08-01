@@ -1,0 +1,5 @@
+# Chart reference (OCI format) for the ShopHub platform release.
+# Points at the chart published from the helm-charts repo (charts/shophub).
+chart: oci://ghcr.io/devops-siit-master/charts/shophub
+version: 0.1.0
+namespace: shophub

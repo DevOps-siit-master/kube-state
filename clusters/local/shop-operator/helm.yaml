@@ -1,0 +1,6 @@
+# Chart reference (OCI format) for the Shop operator release.
+# Owned by the operator work (helm-charts/charts/shop-operator) — placeholder
+# ref, adjust version/registry once the operator chart is published.
+chart: oci://ghcr.io/devops-siit-master/charts/shop-operator
+version: 0.1.0
+namespace: shop-operator-system
