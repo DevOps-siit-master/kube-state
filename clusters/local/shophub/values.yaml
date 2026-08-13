@@ -7,6 +7,16 @@ image:
   repository: shophub-auth-service
   tag: "latest"
 
+# Platform API that manages shop sites via Shop/Wallet/DiscordChannel CRs.
+shophubApi:
+  enabled: true
+  replicaCount: 2
+  image:
+    repository: shophub-api
+    tag: "latest"
+  shopNamespace: shophub-shops
+  createShopNamespace: true
+
 postgres:
   instances: 1
   databaseName: "shophub_auth"
