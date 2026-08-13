@@ -14,3 +14,8 @@ spec:
       namespace: shophub
     - name: shophub-discord
       namespace: shophub
+    # Logging stack (spec 4.1): Loki backend + Promtail shipper.
+    - name: loki
+      namespace: observability
+    - name: promtail
+      namespace: observability

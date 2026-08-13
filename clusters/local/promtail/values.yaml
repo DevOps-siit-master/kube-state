@@ -1,0 +1,18 @@
+# Promtail overrides for the local (kind) cluster.
+#
+# The chart's default scrape config already discovers every pod through the
+# Kubernetes API and relabels namespace / pod / container onto each stream,
+# so we only point it at our Loki gateway and tag the cluster.
+
+config:
+  clients:
+    - url: http://loki-gateway.observability.svc.cluster.local/loki/api/v1/push
+      external_labels:
+        cluster: local
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    memory: 128Mi
