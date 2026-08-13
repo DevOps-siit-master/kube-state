@@ -1,8 +1,10 @@
-# Loki + Promtail (local cluster)
+# Loki + Alloy (local cluster)
 
-Single-binary **Loki** with **Promtail** as the log shipper — the logging
-half of the ShopHub observability stack (spec 4.1). Promtail tails every
-pod's stdout/stderr and pushes to Loki; Loki is queried from Grafana.
+Single-binary **Loki** with **Grafana Alloy** as the log shipper — the logging
+half of the ShopHub observability stack (spec 4.1). Alloy runs as a DaemonSet,
+discovers every pod through the Kubernetes API, and pushes their stdout/stderr
+to Loki; Loki is queried from Grafana. Alloy replaces the now-deprecated
+Promtail (see `../alloy/`).
 
 ## Grafana datasource (coordination)
 
