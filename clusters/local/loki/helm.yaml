@@ -1,8 +1,4 @@
-# Loki — the logging backend for the ShopHub observability stack (spec 4.1).
-# Upstream Grafana community chart. Grafana publishes it via an HTTP repo
-# (not OCI), so the source repo is named explicitly alongside the pinned
-# chart version.
-repo: https://grafana.github.io/helm-charts
+repo: https://grafana-community.github.io/helm-charts
 chart: loki
-version: "6.55.0"  # latest 6.x; 7.x changed the values schema
+version: "18.8.0"
 namespace: observability
