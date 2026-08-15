@@ -14,3 +14,7 @@ spec:
       namespace: shophub
     - name: shophub-discord
       namespace: shophub
+    - name: loki
+      namespace: observability
+    - name: alloy
+      namespace: observability

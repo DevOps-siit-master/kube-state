@@ -1,0 +1,4 @@
+repo: https://grafana.github.io/helm-charts
+chart: alloy
+version: "1.11.1"
+namespace: observability
