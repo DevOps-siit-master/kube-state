@@ -3,4 +3,4 @@
 # version/registry once the chart is published.
 chart: oci://ghcr.io/devops-siit-master/charts/shophub-discord
 version: 0.1.0
-namespace: shophub
+namespace: observability

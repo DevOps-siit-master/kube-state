@@ -1,0 +1,21 @@
+apiVersion: monitoring.coreos.com/v1alpha1
+kind: AlertmanagerConfig
+metadata:
+  name: cluster-discord-routing
+  namespace: observability
+  labels:
+    alertmanagerConfig: cluster
+spec:
+  route:
+    receiver: discord-cluster
+    groupBy: ["alertname"]
+    groupWait: 30s
+    groupInterval: 5m
+    repeatInterval: 4h
+
+  receivers:
+    - name: discord-cluster
+      discordConfigs:
+        - apiURL:
+            name: discord-ops-webhook
+            key: url

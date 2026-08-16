@@ -1,0 +1,37 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: cluster-alerts
+  namespace: observability
+  labels:
+    release: kube-prometheus-stack
+spec:
+  groups:
+    - name: cluster.rules
+      rules:
+        - alert: HighNodeMemoryUsage
+          expr: (1 - (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes)) > 0.85
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Node memory usage is high"
+            description: "Memory usage on {{ $labels.instance }} has been above 85% for 5 minutes."
+
+        - alert: HighNodeCPUUsage
+          expr: (1 - avg by (instance) (rate(node_cpu_seconds_total{mode="idle"}[5m]))) > 0.85
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Node CPU usage is high"
+            description: "CPU usage on {{ $labels.instance }} has been above 85% for 5 minutes."
+
+        - alert: PodCrashLooping
+          expr: increase(kube_pod_container_status_restarts_total[15m]) > 3
+          for: 5m
+          labels:
+            severity: critical
+          annotations:
+            summary: "Pod is crash-looping"
+            description: "Pod {{ $labels.namespace }}/{{ $labels.pod }} has restarted more than 3 times in the last 15 minutes."
