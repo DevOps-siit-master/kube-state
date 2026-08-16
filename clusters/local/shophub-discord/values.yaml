@@ -1,2 +1,6 @@
 # Value overrides for the shophub-discord chart on the local cluster.
 # Populated by the notifications owner; empty means chart defaults apply.
+discordChannelObjectName: "discord-ops"
+discord:
+  channelName: "cluster-ops"
+  serverID: "1505279123801767956"
