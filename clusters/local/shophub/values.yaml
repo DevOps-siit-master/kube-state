@@ -23,3 +23,18 @@ postgres:
   username: "shophub_admin"
   storageClass: "standard"
   storageSize: "1Gi"
+
+# Prometheus scraping of the ShopHub platform services (spec 3.3 / 4.1). The
+# chart ships the ServiceMonitors opt-in because they need the
+# monitoring.coreos.com CRDs from the kube-prometheus-stack release; enable them
+# here and stamp the release label its Prometheus selects on — matching the
+# convention in cluster-alerting/cluster-alerts.yaml.
+# PREREQUISITES before applying: (1) kube-prometheus-stack is deployed on the
+# cluster, and (2) helm.yaml points at a chart version that contains the
+# ServiceMonitor template (>= 0.3.0). Otherwise the release fails on the missing
+# CRD or the override is a no-op.
+metrics:
+  serviceMonitor:
+    enabled: true
+    labels:
+      release: kube-prometheus-stack
