@@ -1,2 +1,9 @@
 # Value overrides for the shop-operator chart on the local cluster.
 # Populated by the operator owner; empty means chart defaults apply.
+
+images:
+  auth: shophub/auth:dev
+  order: shophub/order:dev
+  payment: shophub/payment:dev
+  frontend: shophub/frontend:dev
+imagePullPolicy: Never
