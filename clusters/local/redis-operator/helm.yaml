@@ -1,0 +1,4 @@
+repo: https://ot-container-kit.github.io/helm-charts
+chart: redis-operator
+version: "0.25.0"
+namespace: redis-operator
