@@ -1,0 +1,7 @@
+# CloudNativePG operator — provisions the Postgres cluster the shophub chart
+# creates (templates/postgres-cluster.yaml). Must be present before the shophub
+# release, otherwise the Cluster CR has no controller to act on it.
+repo: https://cloudnative-pg.io/charts
+chart: cloudnative-pg
+version: "0.29.0"
+namespace: cnpg-system

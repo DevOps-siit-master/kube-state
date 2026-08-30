@@ -1,5 +1,8 @@
 # Chart reference (OCI format) for the ShopHub platform release.
 # Points at the chart published from the helm-charts repo (charts/shophub).
 chart: oci://ghcr.io/devops-siit-master/charts/shophub
-version: 0.1.0
+# Bumped to 0.3.0 for the metrics ServiceMonitor + dashboard (spec 3.3 / 4.1).
+# Must match the published chart version that contains those templates; apply
+# only once that version is published to the registry.
+version: 0.3.0
 namespace: shophub

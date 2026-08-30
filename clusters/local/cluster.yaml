@@ -8,6 +8,10 @@ spec:
   distribution: kind
   kubernetesVersion: "1.30"
   releases:
+    - name: cnpg
+      namespace: cnpg-system
+    - name: redis-operator
+      namespace: redis-operator
     - name: shop-operator
       namespace: shop-operator-system
     - name: shophub
