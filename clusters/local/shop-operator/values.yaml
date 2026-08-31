@@ -6,6 +6,7 @@ images:
   order: shophub/order:dev
   payment: shophub/payment:dev
   frontend: shophub/frontend:dev
+  inventory: shophub/inventory:dev
 imagePullPolicy: Never
 payment:
   usdtAddress: "0xE185e953cB57CE043F056A1bBB8EDeE21f28dBee"
