@@ -35,3 +35,21 @@ spec:
           annotations:
             summary: "Pod is crash-looping"
             description: "Pod {{ $labels.namespace }}/{{ $labels.pod }} has restarted more than 3 times in the last 15 minutes."
+
+        - alert: HighNodeFilesystemUsage
+          expr: (1 - (node_filesystem_avail_bytes{fstype!="tmpfs"} / node_filesystem_size_bytes{fstype!="tmpfs"})) > 0.85
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Node filesystem usage is high"
+            description: "Filesystem {{ $labels.mountpoint }} on {{ $labels.instance }} has been above 85% full for 5 minutes."
+
+        - alert: HighNodeNetworkTraffic
+          expr: (rate(node_network_receive_bytes_total{device!="lo"}[5m]) + rate(node_network_transmit_bytes_total{device!="lo"}[5m])) > 50 * 1024 * 1024
+          for: 5m
+          labels:
+            severity: warning
+          annotations:
+            summary: "Node network traffic is high"
+            description: "Combined rx+tx on {{ $labels.instance }} ({{ $labels.device }}) has sustained over 50MB/s for 5 minutes."
