@@ -1,0 +1,43 @@
+# Tempo (single-binary) for the local (kind) cluster — the tracing backend of
+# the ShopHub observability stack (spec 4.1). It receives OTLP traces from the
+# Shop microservices (auth/order/payment/inventory) and is queried from the
+# Grafana that ships with kube-prometheus-stack, via the datasource with the
+# fixed uid "tempo" (see ../kube-prometheus-stack/values.yaml).
+#
+# Single binary + local filesystem storage is the smallest footprint that still
+# ingests and serves traces — the same shape Loki is run in on this cluster.
+
+tempo:
+  # Only accept OTLP (gRPC 4317, HTTP 4318); the Shop microservices export OTLP.
+  # The operator wires each Shop pod's OTEL_EXPORTER_OTLP_ENDPOINT at the HTTP
+  # port of this release's Service (tempo.observability.svc:4318).
+  receivers:
+    otlp:
+      protocols:
+        grpc:
+          endpoint: 0.0.0.0:4317
+        http:
+          endpoint: 0.0.0.0:4318
+  storage:
+    trace:
+      backend: local
+      local:
+        path: /var/tempo/traces
+      wal:
+        path: /var/tempo/wal
+  # Keep 7 days of traces, matching Loki's log retention window.
+  retention: 168h
+
+# Persist traces across pod restarts with a small dev-sized PVC, like Loki's
+# singleBinary.persistence.
+persistence:
+  enabled: true
+  storageClassName: standard
+  size: 5Gi
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 128Mi
+  limits:
+    memory: 256Mi
