@@ -1,0 +1,72 @@
+# kube-prometheus-stack overrides for the local (kind) cluster.
+#
+# This chart ships the Grafana that the whole ShopHub observability stack shares
+# (spec 4.1). The other observability releases (Loki, Tempo) deliberately bring
+# no Grafana of their own — they plug into this one here:
+#
+#   * Loki is registered as a datasource (uid "loki") so log dashboards and the
+#     per-Shop log panels can query it.
+#   * Tempo is registered as a datasource (uid "tempo") so traces show up and
+#     correlate with logs and metrics.
+#
+# The uids are fixed on purpose: the ShopHub platform dashboards
+# (helm-charts/charts/shophub) and the per-Shop dashboards the shop-operator
+# generates reference these datasources by uid, so they must stay stable.
+
+grafana:
+  additionalDataSources:
+    # --- Logs (Loki) ---------------------------------------------------------
+    - name: Loki
+      type: loki
+      uid: loki
+      access: proxy
+      # Loki's single stable endpoint on this cluster (see ../loki/values.yaml,
+      # gateway.enabled). Same URL Alloy pushes to, minus the push path.
+      url: http://loki-gateway.observability.svc.cluster.local
+      jsonData:
+        # Logs -> traces: turn a trace id found in a log line into a link that
+        # opens the matching trace in Tempo. Harmless when no id is present.
+        derivedFields:
+          - name: TraceID
+            datasourceUid: tempo
+            # Matches "trace_id=<hex>" or "traceID=<hex>" emitted by the
+            # OpenTelemetry-instrumented services.
+            matcherRegex: '(?:trace_id|traceID)[=:"\s]+(\w+)'
+            url: '$${__value.raw}'
+    # --- Traces (Tempo) ------------------------------------------------------
+    - name: Tempo
+      type: tempo
+      uid: tempo
+      access: proxy
+      # Tempo's query HTTP API. The grafana/tempo chart sets
+      # server.http_listen_port to 3200 (moved off 3100 to avoid clashing with
+      # Loki), and exposes it on the Service as port "tempo-prom-metrics".
+      url: http://tempo.observability.svc.cluster.local:3200
+      jsonData:
+        # Traces -> logs: jump from a span to that service's logs in Loki.
+        tracesToLogsV2:
+          datasourceUid: loki
+          spanStartTimeShift: -1h
+          spanEndTimeShift: 1h
+          filterByTraceID: true
+          tags:
+            - key: service.name
+              value: service_name
+        # Traces -> metrics service map, drawn from the stack's own Prometheus.
+        serviceMap:
+          datasourceUid: prometheus
+        nodeGraph:
+          enabled: true
+
+  # The dashboard sidecar must watch every namespace, not just observability:
+  # the shop-operator writes each Shop's dashboard ConfigMap into the Shop's own
+  # namespace (shophub-shops), and the ShopHub platform dashboards live in the
+  # shophub namespace. Without this, none of those are discovered.
+  sidecar:
+    dashboards:
+      enabled: true
+      searchNamespace: ALL
+      # Default label the operator and shophub chart already stamp on their
+      # dashboard ConfigMaps; kept explicit so the contract is visible here.
+      label: grafana_dashboard
+      labelValue: "1"

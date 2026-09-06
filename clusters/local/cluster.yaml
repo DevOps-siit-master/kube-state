@@ -22,6 +22,8 @@ spec:
       namespace: observability
     - name: alloy
       namespace: observability
+    - name: tempo
+      namespace: observability
     - name: ingress-nginx
       namespace: ingress-nginx
     - name: kube-prometheus-stack
