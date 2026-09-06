@@ -10,4 +10,4 @@ images:
 imagePullPolicy: Never
 payment:
   usdtAddress: "0xE185e953cB57CE043F056A1bBB8EDeE21f28dBee"
-  sepoliaRpcUrl: "https://sepolia.drpc.org"
+  sepoliaRpcUrl: "https://ethereum-sepolia-rpc.publicnode.com"
